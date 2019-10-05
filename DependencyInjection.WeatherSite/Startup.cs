@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using DependencyInjection.Application;
+using DependencyInjection.Infrastructure;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Refit;
 
 namespace DependencyInjection.WeatherSite
 {
@@ -53,6 +56,10 @@ namespace DependencyInjection.WeatherSite
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddTransient<ForecastReader>();
+            services.AddTransient<WeatherApiStore>();
+            services.AddTransient(x => RestService.For<IOpenWeatherApiClient>("https://api.openweathermap.org/data/2.5"));
         }
     }
 }

@@ -8,7 +8,7 @@ namespace DependencyInjection.WeatherSite.Controllers
     {
         private readonly ForecastReader _forecastReader;
 
-        public HomeController() => _forecastReader = ServicesLocator.ServiceLocator.GetForecastReader();
+        public HomeController(ForecastReader forecastReader) => _forecastReader = forecastReader;
 
         public async Task<IActionResult> GetWeather(string query)
         {

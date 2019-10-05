@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Refit;
+using Serilog;
 
 namespace DependencyInjection.WeatherSite
 {
@@ -57,9 +58,14 @@ namespace DependencyInjection.WeatherSite
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
-            services.AddTransient<ForecastReader>();
+            services.AddTransient<IForecastReader, ForecastReader>();
+            services.Decorate<IForecastReader, ForecastLogDecoretor>();
             services.AddTransient<WeatherApiStore>();
             services.AddTransient(x => RestService.For<IOpenWeatherApiClient>("https://api.openweathermap.org/data/2.5"));
+
+            services.AddTransient<ILogger>(x => new LoggerConfiguration()
+                .WriteTo.Console()
+                .CreateLogger());
         }
     }
 }
